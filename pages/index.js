@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import Head from 'next/head';
+import dynamic from 'next/dynamic';
 
 // import Fuse from 'fuse.js';
 // import _ from 'lodash';
 
 import { countries } from '../countries';
 import styles from '../styles/Home.module.css';
-import CodeSampleModal from '../components/CodeSampleModal';
+// import CodeSampleModal from '../components/CodeSampleModal';
 
 import Image from 'next/image';
 
@@ -17,6 +18,9 @@ export default function Start({ countries }) {
   //   keys: ['name'],
   //   threshold: 0.3,
   // });
+  const CodeSampleModal = dynamic(() => import('../components/CodeSampleModal'), {
+    ssr: false,
+  });
 
   return (
     <div>
@@ -106,10 +110,18 @@ export default function Start({ countries }) {
           <h2 className={styles.secondaryHeading}>Code Sample</h2>
           <p>Ever wondered how to write a function that prints Hello World?</p>
           <button onClick={() => setIsModalOpen(true)}>Show Me</button>
-          <CodeSampleModal
+          {/* <CodeSampleModal
             isOpen={isModalOpen}
             closeModal={() => setIsModalOpen(false)}
-          />
+          /> */}
+          
+            isModalOpen && (
+              <CodeSampleModal
+                isOpen={isModalOpen}
+                closeModal={() => setIsModalOpen(false)}
+              />
+           );
+          
         </div>
       </main>
 
