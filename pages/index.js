@@ -1,5 +1,20 @@
+import { SpeedInsights } from '@vercel/speed-insights/next';
+
 import { useState } from 'react';
 import Head from 'next/head';
+import Script from 'next/script';
+ 
+function IndexPage() {
+  return (
+    <div>
+      <Script
+        strategy="afterInteractive"
+        src="https://www.googletagmanager.com/gtag/js?id=123"
+      />
+    </div>
+  );
+}
+
 import dynamic from 'next/dynamic';
 
 // import Fuse from 'fuse.js';
@@ -23,15 +38,23 @@ export default function Start({ countries }) {
   });
 
   return (
+    <>
     <div>
       <Head>
         <title>Core Web Vitals</title>
         <meta name="description" content="Core web vitals walk through" />
         <link rel="icon" href="/favicon.ico" />
-        <link
+        {/* <link
           href="https://fonts.googleapis.com/css2?family=Inter"
           rel="stylesheet"
-        />
+        /> */}
+        {/* <style data-href="https://fonts.googleapis.com/css2?family=Inter"> */}
+          {/* @font-face{
+            font-style:normal;
+            font-family: 'Inter';
+            
+          } */}
+        {/* </style> */}
       </Head>
 
       <main className={styles.container}>
@@ -143,6 +166,8 @@ export default function Start({ countries }) {
         </a>
       </footer>
     </div>
+    <SpeedInsights />
+    </>
   );
 }
 
