@@ -1,20 +1,22 @@
 import { useState } from 'react';
 import Head from 'next/head';
 
-import Fuse from 'fuse.js';
-import _ from 'lodash';
+// import Fuse from 'fuse.js';
+// import _ from 'lodash';
 
 import { countries } from '../countries';
 import styles from '../styles/Home.module.css';
 import CodeSampleModal from '../components/CodeSampleModal';
 
+import Image from 'next/image';
+
 export default function Start({ countries }) {
   const [results, setResults] = useState(countries);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const fuse = new Fuse(countries, {
-    keys: ['name'],
-    threshold: 0.3,
-  });
+  // const fuse = new Fuse(countries, {
+  //   keys: ['name'],
+  //   threshold: 0.3,
+  // });
 
   return (
     <div>
@@ -34,12 +36,13 @@ export default function Start({ countries }) {
         </h1>
 
         <div className={styles.heroImage}>
-          <img src="large-image.jpg" alt="Large Image" />
+          {/* <Image src="/large-image.jpg" width={3048} height={2024} alt="Large Image"/> */}
+          <Image src="/large-image.jpg" alt="Large Image" width={3048} height={2024} />
         </div>
 
         <div>
           <h2 className={styles.secondaryHeading}>Population Lookup</h2>
-          <input
+          {/* <input
             type="text"
             placeholder="Country search..."
             className={styles.input}
@@ -60,6 +63,32 @@ export default function Start({ countries }) {
                 searchedAt: _.now(),
               });
             }}
+          /> */}
+          <input
+            type="text"
+            placeholder="Country search..."
+            className={styles.input}
+            onChange={async (e) => {
+              const { value } = e.currentTarget;
+             // Dynamically load libraries
+             const Fuse = (await import('fuse.js')).default;
+             const _ = (await import('lodash')).default;
+ 
+             const fuse = new Fuse(countries, {
+               keys: ['name'],
+               threshold: 0.3,
+             });
+ 
+             const searchResult = fuse.search(value).map((result) => result.item);
+ 
+             const updatedResults = searchResult.length ? searchResult : countries;
+              setResults(updatedResults);
+ 
+              // Fake analytics hit
+              console.info({
+               searchedAt: _.now(),
+             });
+           }}
           />
 
           <ul className={styles.countries}>
@@ -92,7 +121,12 @@ export default function Start({ countries }) {
         >
           Powered by
           <span className={styles.logo}>
-            <img src="/vercel.svg" alt="Vercel Logo" />
+            <Image 
+              src="/vercel.svg"
+              width={72}
+              height={16}
+              alt="Vercel Logo"
+            />
           </span>
         </a>
       </footer>
